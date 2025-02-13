@@ -1,0 +1,67 @@
+DROP TABLE IF EXISTS student_courses, course_detail, student, course CASCADE;
+
+CREATE TABLE course (
+    course_id SERIAL PRIMARY KEY, 
+    course_code TEXT NOT NULL UNIQUE,
+    course_name TEXT NOT NULL,
+    credit INTEGER NOT NULL,
+    quota INTEGER,
+    is_mandatory BOOLEAN NOT NULL
+);
+
+CREATE TABLE student (
+    student_id SERIAL PRIMARY KEY,
+    name TEXT NOT NULL,
+    surname TEXT,
+    is_student BOOLEAN NOT NULL
+);
+
+CREATE TABLE course_detail (
+    course_detail_id SERIAL PRIMARY KEY,
+    course_id INTEGER NOT NULL REFERENCES course(course_id) ON DELETE CASCADE,
+    lecturer TEXT,
+    schedule TEXT,
+    text_book TEXT,
+    notes TEXT
+);
+
+CREATE TABLE student_courses (
+    student_id INTEGER NOT NULL REFERENCES student(student_id) ON DELETE CASCADE,
+    course_id INTEGER NOT NULL REFERENCES course(course_id) ON DELETE CASCADE
+);
+
+INSERT INTO course (course_code, course_name, credit, quota, is_mandatory)
+VALUES 
+('CSE 101', 'Introduction to Programming', 4, 100, TRUE),
+('CSE 213', 'Data Structures', 4, 80, TRUE),
+('CSE 331', 'Database Management Systems', 3, 60, TRUE),
+('CSE 410', 'Artificial Intelligence', 3, 50, FALSE),
+('CSE 451', 'Cyber Security', 3, 50, FALSE);
+
+INSERT INTO student (name, surname, is_student)
+VALUES 
+('Ali', 'Yılmaz', TRUE),
+('Zeynep', 'Demir', TRUE),
+('Mehmet', 'Kaya', TRUE),
+('Elif', 'Şahin', TRUE),
+('Burak', 'Çelik', TRUE);
+
+INSERT INTO course_detail (course_id, lecturer, schedule, text_book, notes)
+VALUES 
+(1, 'Prof. Dr. Ahmet Kaya', 'Monday 10:00-12:00', 'Introduction to Java', 'Basic programming concepts.'),
+(2, 'Assoc. Prof. Dr. Zeynep Arslan', 'Wednesday 14:00-16:00', 'Data Structures and Algorithms', 'Linked lists, trees, graphs.'),
+(3, 'Dr. Mehmet Demir', 'Thursday 09:00-11:00', 'Database Systems', 'SQL and relational databases.'),
+(4, 'Dr. Elif Öztürk', 'Friday 13:00-15:00', 'Artificial Intelligence', 'Machine learning concepts.'),
+(5, 'Dr. Burak Yıldız', 'Tuesday 11:00-13:00', 'Cyber Security Essentials', 'Network security, cryptography.');
+
+INSERT INTO student_courses (student_id, course_id)
+VALUES 
+(1, 1), (1, 3),
+(2, 2), (2, 4),
+(3, 1), (3, 5),
+(4, 3), (4, 4),
+(5, 2), (5, 5);
+
+SELECT C.course_code, C.course_name, S.name 
+FROM student_courses SC, student S, course_detail CD, course C 
+WHERE SC.course_id = CD.course_id AND S.student_id = SC.student_id;
