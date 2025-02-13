@@ -25,6 +25,9 @@ services:
       DB_NAME: universityapp
     ports:
       - "3000:3000"
+    volumes:
+      - ./server:/app # Kodu container içine bağla
+      - /app/node_modules # node_modules'ü hariç tut (ÖNEMLİ!)
     depends_on:
       - mysql
 
