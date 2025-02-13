@@ -1,0 +1,3 @@
+[submodule "UnivercityMobile"]
+	path = UnivercityMobile
+	url = git@github.com:YavuzSelimMeletlioglu/UnivercityMobile.git
