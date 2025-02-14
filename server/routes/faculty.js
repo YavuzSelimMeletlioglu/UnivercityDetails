@@ -3,10 +3,11 @@ const router = express.Router();
 const pool = require('../config/db');
 
 // Get all courses
-router.get('/:department_id', async (req, res) => {
+router.get('/:university_id', async (req, res) => {
   try {
-    const {department_id} = req.params
-    const [rows] = await pool.query('SELECT * FROM course WHERE department_id = ?', [department_id]);
+    const {university_id} = req.params
+console.log(university_id)
+    const [rows] = await pool.query('SELECT * FROM faculty WHERE university_id = ?',[university_id]);
     res.json(rows);
   } catch (err) {
     console.error(err);
